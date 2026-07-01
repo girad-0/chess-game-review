@@ -1,0 +1,132 @@
+{% load static %}
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <link rel="stylesheet"
+      href="{% static 'review/css/chessboard-1.0.0.min.css' %}">
+    <title>Game Review</title>
+</head>
+
+<body>
+
+<h1>
+
+{{ review.white_player }}
+
+vs
+
+{{ review.black_player }}
+
+</h1>
+
+<p>
+
+<strong>Event:</strong>
+
+{{ review.event }}
+
+</p>
+
+<p>
+
+<strong>Date:</strong>
+
+{{ review.date }}
+
+</p>
+
+<p>
+
+<strong>Result:</strong>
+
+{{ review.result }}
+
+</p>
+
+<hr>
+<div id="board" style="width: 500px;"></div>
+<h2>Moves</h2>
+
+<table border="1">
+
+<tr>
+    <th>Move</th>
+    <th>Player</th>
+    <th>Move Played</th>
+    <th>Evaluation</th>
+    <th>Best Move</th>
+</tr>
+
+{% for move in review_data.moves %}
+
+<tr>
+
+    <td>{{ move.move_number }}</td>
+
+    <td>{{ move.player }}</td>
+
+    <td>{{ move.san }}</td>
+
+    <td>{{ move.evaluation }}</td>
+
+    <td>{{ move.best_move }}</td>
+
+    <td>
+        <button
+            type="button"
+            class="move-button"
+            data-fen="{{ move.fen_after }}">
+            {{ move.san }}
+        </button>
+    </td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+<br>
+
+<a href="{% url 'home' %}">
+
+Back to Home
+
+</a>
+<script src="{% static 'review/js/jquery-3.6.0.min.js' %}"></script>
+
+<script src="{% static 'review/js/chess.min.js' %}"></script>
+
+<script src="{% static 'review/js/chessboard-1.0.0.min.js' %}"></script>
+
+<script>
+
+var board = Chessboard("board", {
+    position: "start",
+    draggable: false,
+
+    pieceTheme: function(piece) {
+        return "{% static 'review/img/chesspieces/wikipedia/' %}" + piece + ".png";
+    }
+});
+
+const buttons = document.querySelectorAll(".move-button");
+
+buttons.forEach(function(button) {
+
+    button.addEventListener("click", function() {
+
+        const fen = this.dataset.fen;
+
+        board.position(fen);
+
+    });
+
+});
+
+</script>
+</body>
+
+</html>

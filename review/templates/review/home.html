@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Chess Game Review</title>
+</head>
+
+<body>
+
+    <h1>Chess Game Review</h1>
+
+    <hr>
+
+    <h2>Upload PGN</h2>
+
+    <form method="POST" enctype="multipart/form-data">
+
+        {% csrf_token %}
+
+        {{ form.as_p }}
+
+        <button type="submit">
+            Upload Game
+        </button>
+
+    </form>
+
+    <hr>
+
+    <h2>Uploaded Games</h2>
+
+    {% if reviews %}
+
+        {% for review in reviews %}
+
+            <div>
+
+                <h3>
+
+<a href="{% url 'review_page' review.id %}">
+
+{{ review.white_player }}
+
+vs
+
+{{ review.black_player }}
+
+</a>
+
+</h3>
+
+                <p>
+                    <strong>Event:</strong>
+                    {{ review.event }}
+                </p>
+
+                <p>
+                    <strong>Date:</strong>
+                    {{ review.date }}
+                </p>
+
+                <p>
+                    <strong>Result:</strong>
+                    {{ review.result }}
+                </p>
+
+                <hr>
+
+            </div>
+
+        {% endfor %}
+
+    {% else %}
+
+        <p>No games uploaded yet.</p>
+
+    {% endif %}
+
+</body>
+
+</html>
+
+{% for review in reviews %}
+
+<h2>{{ review.white_player }} vs {{ review.black_player }}</h2>
+
+<p>Event: {{ review.event }}</p>
+
+<p>Date: {{ review.date }}</p>
+
+<hr>
+
+{% empty %}
+
+<p>No games uploaded yet.</p>
+
+{% endfor %}
